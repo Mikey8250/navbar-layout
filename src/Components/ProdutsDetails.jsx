@@ -1,33 +1,64 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import axios from "../Utils/Axios";
+import Loading from "./Loading";
 
-function ProdutsDetails() {
+function ProductDetails() {
+  const [product, setProduct] = useState(null);
+  const { id } = useParams();
+
+  const getSingleProduct = async () => {
+    try {
+      const { data } = await axios(`/products/${id}`);
+      setProduct(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getSingleProduct();
+  }, []);
+
+  if (!product) return <Loading />;
+
   return (
-    <div className="w-[70%] h-full m-auto py-[10%] flex justify-between items-center">
-      <img
-        src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
-        alt=""
-        className="w-[50%] h-[80%] object-contain"
-      />
-      <div className="content w-[50%]">
-        <h1 className="text-4xl">
-          Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops
-        </h1>
-        <h3 className="text-zinc-400 my-5">men's clothing</h3>
-        <h2 className="text-red-300 mb-3">$109.95</h2>
-        <p className="mb-[5%]">
-          Your perfect pack for everyday use and walks in the forest. Stash your
-          laptop (up to 15 inches) in the padded sleeve, your everyday
+    <div className="max-w-6xl mx-auto px-4 py-16 flex flex-col md:flex-row gap-10 items-center">
+      {/* Product Image */}
+      <div className="w-full md:w-1/2">
+        <img
+          src={product.image}
+          alt={product.title}
+          className="w-full h-[350px] object-contain rounded-xl shadow-md"
+        />
+      </div>
+
+      {/* Product Content */}
+      <div className="w-full md:w-1/2 space-y-6">
+        <h1 className="text-3xl font-bold text-gray-800">{product.title}</h1>
+        <p className="text-sm text-gray-400 uppercase tracking-wider">
+          {product.category}
         </p>
-        <Link className="py-2 px-5 border rounded border-red-200 text-red-300 mr-5">
-          Edit
-        </Link>
-        <Link className="py-2 px-5 border rounded border-blue-200 text-blue-300">
-          Delete
-        </Link>
+        <p className="text-2xl font-semibold text-red-500">${product.price}</p>
+        <p className="text-gray-600 leading-relaxed">{product.description}</p>
+
+        <div className="flex gap-4 mt-6">
+          <Link
+            className="py-2 px-6 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition"
+            to="#"
+          >
+            Edit
+          </Link>
+          <Link
+            className="py-2 px-6 rounded-lg border border-blue-300 text-blue-500 hover:bg-blue-50 transition"
+            to="#"
+          >
+            Delete
+          </Link>
+        </div>
       </div>
     </div>
   );
 }
 
-export default ProdutsDetails;
+export default ProductDetails;
