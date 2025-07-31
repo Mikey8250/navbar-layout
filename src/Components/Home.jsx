@@ -8,7 +8,7 @@ import axios from "../Utils/Axios";
 function Home() {
   const [products] = useContext(productContext);
   const [filteredProduct, setfilteredProduct] = useState(null);
-  let pro = null;
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   // console.log(typeof queryParams);
