@@ -1,24 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "../Utils/Axios";
 import Loading from "./Loading";
 import BackToHome from "./BackToHome";
+import { productContext } from "../Utils/Context";
 
 function ProductDetails() {
+  const [products, setProducts] = useContext(productContext);
   const [product, setProduct] = useState(null);
   const { id } = useParams();
 
-  const getSingleProduct = async () => {
-    try {
-      const { data } = await axios(`/products/${id}`);
-      setProduct(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const navigate = useNavigate();
+
+  // const getSingleProduct = async () => {
+  //   try {
+  //     const { data } = await axios(`/products/${id}`);
+  //     setProduct(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const productDeleteHandler = (id) => {
+    const filteredProduct = products.filter((p) => p.id != id);
+    setProducts(filteredProduct);
+    localStorage.setItem("products", JSON.stringify(filteredProduct));
+    navigate("/");
   };
 
   useEffect(() => {
-    getSingleProduct();
+    // getSingleProduct();
+    if (!product) {
+      setProduct(products.filter((p) => p.id == id)[0]);
+    }
   }, []);
 
   if (!product) return <Loading />;
@@ -54,12 +68,13 @@ function ProductDetails() {
             >
               Edit
             </Link>
-            <Link
+            <button
+              onClick={() => productDeleteHandler(product.id)}
               className="py-2 px-6 rounded-lg border border-blue-300 text-blue-500 hover:bg-blue-50 transition"
               to="#"
             >
               Delete
-            </Link>
+            </button>
           </div>
         </div>
       </div>

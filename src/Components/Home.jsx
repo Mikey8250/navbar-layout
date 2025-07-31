@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { productContext } from "../Utils/Context";
 import Loading from "./Loading";
 import axios from "../Utils/Axios";
+import BackToHome from "./backToHome";
 
 function Home() {
   const [products] = useContext(productContext);
@@ -32,10 +33,24 @@ function Home() {
     }
   }, [category, products]);
 
+  // useEffect(() => {
+  //   if (category) {
+  //     const filtered = products?.filter((p) => p.category === category);
+  //     setfilteredProduct(filtered);
+  //   } else {
+  //     setfilteredProduct(products);
+  //   }
+  // }, [category, products]);
+
   return products ? (
     <>
       <Nav></Nav>
-      <div className="w-[85%] mx-auto p-5 pt-[5%] flex flex-wrap gap-5 justify-start overflow-y-scroll">
+      <div className="w-[85%] mx-auto p-5 pt-[5%] flex flex-wrap gap-5 justify-start overflow-y-scroll relative">
+        {category && (
+          <div className="absolute left-[-2%] top-5 z-10 w-full">
+            <BackToHome />
+          </div>
+        )}
         {filteredProduct &&
           filteredProduct.map((product, index) => {
             return (
