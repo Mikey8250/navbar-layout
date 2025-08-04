@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { productContext } from "../Utils/Context";
 import Loading from "./Loading";
 import axios from "../Utils/Axios";
-import BackToHome from "./backToHome";
+import BackToHome from "./BackToHome";
 
 function Home() {
   const [products] = useContext(productContext);

@@ -64,7 +64,7 @@ function ProductDetails() {
           <div className="flex gap-4 mt-6">
             <Link
               className="py-2 px-6 rounded-lg border border-red-300 text-red-500 hover:bg-red-50 transition"
-              to="#"
+              to={`/edit/${product.id}`}
             >
               Edit
             </Link>
